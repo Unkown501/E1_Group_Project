@@ -13,9 +13,6 @@ public class LightsOut : MonoBehaviour
 
     private RectTransform containerRect;
 
-
-
-
     private GameObject[,] lights;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,8 +24,8 @@ public class LightsOut : MonoBehaviour
         float height = containerRect.rect.height;
         float width = containerRect.rect.width;
 
-        float gapX = (width - nCols*100)/(4-1);
-        float gapY = (height - nRows*100)/(4-1);
+        float gapX = (width - nCols*100)/(nCols-1);
+        float gapY = (height - nRows*100)/(nRows-1);
 
         float offsetX = -0.5f*width + 50;
         float offsetY = -0.5f*height + 50;
