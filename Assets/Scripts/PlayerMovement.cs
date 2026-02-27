@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
         movementX = movementVector.x;
         movementY = movementVector.y;
+        GetComponent<PlayerHealth>().TakeDamage(1);
     }
     void FixedUpdate()
     {
