@@ -7,8 +7,10 @@ public class Pipes : MonoBehaviour
     [SerializeField] GameObject pipePrefab;
     [SerializeField] GameObject pipesContainer;
 
-    [SerializeField] int nRows = 4;
-    [SerializeField] int nCols = 4;
+    [SerializeField] int nRows = 6;
+    [SerializeField] int nCols = 6;
+    [SerializeField] int startRow = 3;
+    [SerializeField] int targetRow = 2;
     // [SerializeField] int[,] initialState;
 
     private RectTransform containerRect;
@@ -30,6 +32,8 @@ public class Pipes : MonoBehaviour
         float offsetX = -0.5f*width + 50;
         float offsetY = -0.5f*height + 50;
 
+        string seed = "";
+
         for (int row = 0; row < pipes.GetLength(0); row++)
         {
             for (int col = 0; col < pipes.GetLength(1); col++)
@@ -43,9 +47,25 @@ public class Pipes : MonoBehaviour
                 int newRow = row;
                 int newCol = col;
 
+                newPipe.GetComponent<PipeButton>().up = UnityEngine.Random.value < 0.6f;
+                newPipe.GetComponent<PipeButton>().down = UnityEngine.Random.value < 0.6f;
+                newPipe.GetComponent<PipeButton>().right = UnityEngine.Random.value < 0.6f;
+                newPipe.GetComponent<PipeButton>().left = UnityEngine.Random.value < 0.6f;
+
+                if (newPipe.GetComponent<PipeButton>().up) seed += "1";
+                else seed += "0";
+                if (newPipe.GetComponent<PipeButton>().right) seed += "1";
+                else seed += "0";
+                if (newPipe.GetComponent<PipeButton>().down) seed += "1";
+                else seed += "0";
+                if (newPipe.GetComponent<PipeButton>().left) seed += "1";
+                else seed += "0";
+
+
                 newPipe.GetComponent<Button>().onClick.AddListener(() => OnButtonClicked(newRow, newCol));
             }
         }
+        Debug.Log(seed);
     }
 
     // Update is called once per frame
@@ -56,11 +76,9 @@ public class Pipes : MonoBehaviour
 
     void OnButtonClicked(int row, int col)
     {
-        Debug.Log($"Clicked button at [{row}, {col}]");
-
         pipes[row, col].GetComponent<PipeButton>().Rotate();
 
-        if (IsConnected(2, 2))
+        if (IsConnected(startRow, targetRow))
         {
             Debug.Log("COMPLETED!");
         }
