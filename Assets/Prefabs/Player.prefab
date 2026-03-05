@@ -524,6 +524,7 @@ MonoBehaviour:
   flashlight: {fileID: 7360522886861729953}
   flashlightLight: {fileID: 3429112055259413106}
   angleOffset: -90
+  batteryDrainRate: 0.1
 --- !u!61 &3750604228842923908
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -611,6 +612,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   maxHealth: 100
   currentHealth: 0
+  maxBattery: 100
+  currentBattery: 0
 --- !u!95 &2177352753555682580
 Animator:
   serializedVersion: 7
