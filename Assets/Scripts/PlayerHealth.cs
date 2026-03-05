@@ -7,6 +7,8 @@ public class PlayerHealth : MonoBehaviour
 
     public int maxHealth = 100;
     public int currentHealth;
+    public int maxBattery = 100;
+    public int currentBattery;
 
     void Awake()
     {
@@ -24,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
 
         // Initialize health only once
         currentHealth = maxHealth;
+        currentBattery = maxBattery;
     }
 
     public void TakeDamage(int damage)
@@ -37,6 +40,26 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
+    public void LoseBattery()
+    {
+        if (currentBattery > 0)
+        {
+            currentBattery--;
+            Debug.Log("Battery Point Deleted. Current Battery: " + currentBattery);
+        }
+    }
+    public void addBattery(int battery)
+    {
+        if (currentBattery + battery > maxBattery)
+        {
+            currentBattery = maxBattery;
+        }
+        else
+        {
+            currentBattery += battery;
+        }
+    }
+
 
     private void Die()
     {

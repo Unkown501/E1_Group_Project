@@ -9,10 +9,15 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float speed = 2.0f;
 
-    [Header("Flashlight (Light2D on child named Flashlight)")]
+    [Header("Flashlight Settings")]
     [SerializeField] Transform flashlight;
-    [SerializeField] Light2D flashlightLight;   // <-- Light2D, not Light
-    [SerializeField] float angleOffset = -90f;  // you needed -90 for your rotation issue
+    [SerializeField] Light2D flashlightLight;
+    [SerializeField] float angleOffset = -90f;
+
+    // New Battery Variables
+    [Tooltip("How many seconds it takes to drain 1 unit of battery")]
+    [SerializeField] float batteryDrainRate = 1.0f;
+    private float drainTimer = 0f;
 
     Vector2 lastMoveDir = Vector2.up;
 
@@ -42,7 +47,47 @@ public class PlayerMovement : MonoBehaviour
     {
         // Toggle with F (New Input System friendly)
         if (flashlightLight != null && Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
-            flashlightLight.enabled = !flashlightLight.enabled;
+        {
+            // If it's off, only allow turning it on if we have battery
+            if (!flashlightLight.enabled)
+            {
+                if (PlayerHealth.Instance.currentBattery > 0)
+                {
+                    flashlightLight.enabled = true;
+                }
+                else
+                {
+                    Debug.Log("Cannot turn on flashlight: Out of battery!");
+                }
+            }
+            else // If it's currently on, turn it off
+            {
+                flashlightLight.enabled = false;
+            }
+        }
+
+        // Handle Battery Drain
+        if (flashlightLight != null && flashlightLight.enabled)
+        {
+            // Check if we still have battery
+            if (PlayerHealth.Instance.currentBattery > 0)
+            {
+                drainTimer += Time.deltaTime;
+
+                // Once the timer hits our drain rate, lose 1 battery and reset timer
+                if (drainTimer >= batteryDrainRate)
+                {
+                    PlayerHealth.Instance.LoseBattery();
+                    drainTimer = 0f;
+                }
+            }
+            else
+            {
+                // Battery hit 0 while the flashlight was on, force it off
+                flashlightLight.enabled = false;
+                Debug.Log("Flashlight died!");
+            }
+        }
 
         // Rotate to face movement direction
         if (flashlight != null)
