@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 3750604228842923908}
   - component: {fileID: 1865164833071218105}
   - component: {fileID: 6818302137272388014}
+  - component: {fileID: 2177352753555682580}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -322,6 +323,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 2
+  flashlight: {fileID: 0}
+  flashlightLight: {fileID: 0}
+  angleOffset: -90
 --- !u!61 &3750604228842923908
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -408,3 +412,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   maxHealth: 100
+  currentHealth: 0
+--- !u!95 &2177352753555682580
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8187439684346143865}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f8022df2160234054ad6309267499cc7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
