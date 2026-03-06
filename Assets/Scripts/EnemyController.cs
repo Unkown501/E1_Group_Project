@@ -1,8 +1,6 @@
 using Pathfinding;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Rendering.Universal;
-// using Unity.VisualScripting;
 
 public class EnemyController : MonoBehaviour
 {
@@ -15,12 +13,8 @@ public class EnemyController : MonoBehaviour
     }
     [SerializeField] private MovementType _MovementType;
     public float viewDistance = 10f;
-    // public float viewAngle = 360f;
-    public bool lightSensitive = false;
-    public bool lightStunable = false;
-    public Light2D flashlight;
+    public float viewAngle = 360f;
 
-    private bool inLight = false;
     AIPath ai;
     Rigidbody2D rb;
     float wanderTimer;
@@ -50,32 +44,6 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    bool CheckLight()
-    {
-        if (!lightSensitive || flashlight.isActiveAndEnabled)
-        {
-            return true;
-        }
-        return false;
-    }
-    bool Stunned()
-    {
-        if (inLight && lightStunable)
-        {
-            return true;
-        }
-        return false;
-    }
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log("Entered Flashlight Trigger");
-            inLight = true;
-    }
-    void OnTriggerExit2D(Collider2D other)
-    {
-        Debug.Log("Exited Flashlight Trigger");
-            inLight = false;
-    }
     void DoDirectChase()
     {
         float distance = Vector2.Distance(rb.position, goal.position);
@@ -83,13 +51,9 @@ public class EnemyController : MonoBehaviour
         int layerMask = LayerMask.GetMask("Walls");
         RaycastHit2D hit = Physics2D.Raycast(rb.position, direction, distance, layerMask);
 
-        if (hit.collider == null && distance <= viewDistance && CheckLight() && !Stunned())
+        if (hit.collider == null && distance <= viewDistance)
         {
             ai.destination = goal.position;
-        }
-        if (Stunned())
-        {
-            ai.destination = rb.position;
         }
     }
 
@@ -101,19 +65,14 @@ public class EnemyController : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rb.position, direction, distance, layerMask);
 
-        if (hit.collider == null && distance <= viewDistance && CheckLight() && !Stunned())
+        if (hit.collider == null && distance <= viewDistance)
         {
             ai.destination = goal.position;
-            
         }
         else
         {
             Wander();
         }
-        if (Stunned())
-            {
-                ai.destination = rb.position;
-            }
     }
 
     void DoRushDown()
@@ -124,7 +83,7 @@ public class EnemyController : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rb.position, direction, distance, layerMask);
 
-        if (hit.collider == null && distance <= viewDistance && CheckLight())
+        if (hit.collider == null && distance <= viewDistance)
         {
             StartCoroutine(Rush(direction));
         }
@@ -145,12 +104,8 @@ public class EnemyController : MonoBehaviour
         ai.destination = wanderTarget;
     }
 
-    IEnumerator Rush(Vector2 direction) // cant stun after finished charging
+    IEnumerator Rush(Vector2 direction)
     {
-        if (Stunned())
-        {
-            yield break;
-        }
         yield return new WaitForSeconds(3f);
 
         ai.enabled = false;
@@ -165,7 +120,7 @@ public class EnemyController : MonoBehaviour
                 break;
 
             rb.linearVelocity = direction * speed;
-
+            
             elapsed += Time.deltaTime;
             yield return null;
         }
