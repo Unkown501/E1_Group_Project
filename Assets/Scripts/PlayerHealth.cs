@@ -9,6 +9,8 @@ public class PlayerHealth : MonoBehaviour
     public int currentHealth;
     public int maxBattery = 100;
     public int currentBattery;
+    public int maxShieldingLevel = 100;
+    public int currentShieldingLevel;
 
     void Awake()
     {
@@ -47,6 +49,26 @@ public class PlayerHealth : MonoBehaviour
             currentBattery--;
             Debug.Log("Battery Point Deleted. Current Battery: " + currentBattery);
         }
+    }
+    public void loseShield()
+    {
+        if (currentShieldingLevel > 0)
+        {
+            currentShieldingLevel--;
+            Debug.Log("Shielding Level Depleted. Current Shielding Level: " + currentShieldingLevel);
+        }
+        else
+        {
+            OnPlayerDeath?.Invoke();
+            Die();
+        }
+    }
+    public void addShield(int shield)
+    {
+        if (currentShieldingLevel + shield > maxShieldingLevel)
+            currentShieldingLevel = maxShieldingLevel;
+        else
+            currentShieldingLevel += shield;
     }
     public void addBattery(int battery)
     {
