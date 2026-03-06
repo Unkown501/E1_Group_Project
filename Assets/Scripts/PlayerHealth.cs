@@ -75,10 +75,12 @@ public class PlayerHealth : MonoBehaviour
         if (currentBattery + battery > maxBattery)
         {
             currentBattery = maxBattery;
+            Debug.Log("Battery Level Increased. Current Level: " + currentBattery);
         }
         else
         {
             currentBattery += battery;
+            Debug.Log("Battery Level Increased. Current Level: " + currentBattery);
         }
     }
 

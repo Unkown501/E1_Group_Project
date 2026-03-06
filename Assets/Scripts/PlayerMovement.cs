@@ -17,7 +17,10 @@ public class PlayerMovement : MonoBehaviour
     // New Battery Variables
     [Tooltip("How many seconds it takes to drain 1 unit of battery")]
     [SerializeField] float batteryDrainRate = 1.0f;
+    [SerializeField] float batteryAddRate = 1.0f;
     private float drainTimer = 0f;
+    private float addTimer = 0f;
+
 
     Vector2 lastMoveDir = Vector2.up;
 
@@ -92,6 +95,16 @@ public class PlayerMovement : MonoBehaviour
                 // Battery hit 0 while the flashlight was on, force it off
                 flashlightLight.enabled = false;
                 Debug.Log("Flashlight died!");
+            }
+        } else
+        {
+            addTimer += Time.deltaTime;
+
+            // Once the timer hits our drain rate, add 1 battery and reset timer
+            if (addTimer >= batteryAddRate)
+            {
+                PlayerHealth.Instance.addBattery(1);
+                addTimer = 0f;
             }
         }
 
