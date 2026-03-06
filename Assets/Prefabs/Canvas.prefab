@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 5387067933508514044}
   - component: {fileID: 2617950541162348936}
   - component: {fileID: 5923986970893208489}
+  - component: {fileID: -6317452445359465820}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -331,6 +332,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-6317452445359465820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5926144691947085183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a780896715735c468afa04f81340bb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBarsUI
+  healthFill: {fileID: 0}
+  batteryFill: {fileID: 0}
+  staminaFill: {fileID: 0}
 --- !u!1 &7256845678004465121
 GameObject:
   m_ObjectHideFlags: 0

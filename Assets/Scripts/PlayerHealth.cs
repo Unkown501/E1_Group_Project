@@ -12,6 +12,10 @@ public class PlayerHealth : MonoBehaviour
     public int maxShieldingLevel = 100;
     public int currentShieldingLevel;
 
+    // New Sprint/Stamina Variables
+    public int maxStamina = 100;
+    public int currentStamina;
+
     void Awake()
     {
         // Singleton Logic: Ensure only one PlayerHealth exists
@@ -29,6 +33,10 @@ public class PlayerHealth : MonoBehaviour
         // Initialize health only once
         currentHealth = maxHealth;
         currentBattery = maxBattery;
+
+        // Initialize stamina / shield
+        currentStamina = maxStamina;
+        currentShieldingLevel = maxShieldingLevel;
     }
 
     public void TakeDamage(int damage)
@@ -42,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
+
     public void LoseBattery()
     {
         if (currentBattery > 0)
@@ -50,6 +59,7 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("Battery Point Deleted. Current Battery: " + currentBattery);
         }
     }
+
     public void loseShield()
     {
         if (currentShieldingLevel > 0)
@@ -63,6 +73,7 @@ public class PlayerHealth : MonoBehaviour
             Die();
         }
     }
+
     public void addShield(int shield)
     {
         if (currentShieldingLevel + shield > maxShieldingLevel)
@@ -70,6 +81,7 @@ public class PlayerHealth : MonoBehaviour
         else
             currentShieldingLevel += shield;
     }
+
     public void addBattery(int battery)
     {
         if (currentBattery + battery > maxBattery)
@@ -84,6 +96,28 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    // Sprint/Stamina Helpers
+    public bool HasStamina()
+    {
+        return currentStamina > 0;
+    }
+
+    public void LoseStamina()
+    {
+        if (currentStamina > 0)
+        {
+            currentStamina--;
+            Debug.Log("Stamina Depleted. Current Stamina: " + currentStamina);
+        }
+    }
+
+    public void addStamina(int amount)
+    {
+        if (currentStamina + amount > maxStamina)
+            currentStamina = maxStamina;
+        else
+            currentStamina += amount;
+    }
 
     private void Die()
     {

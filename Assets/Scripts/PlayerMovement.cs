@@ -21,6 +21,15 @@ public class PlayerMovement : MonoBehaviour
     private float drainTimer = 0f;
     private float addTimer = 0f;
 
+    // New Sprint Variables
+    [Header("Sprint Settings")]
+    [SerializeField] float sprintMultiplier = 1.75f;
+    [Tooltip("How many seconds it takes to drain 1 unit of stamina while sprinting")]
+    [SerializeField] float staminaDrainRate = 0.15f;
+    [Tooltip("How many seconds it takes to regen 1 unit of stamina while not sprinting")]
+    [SerializeField] float staminaAddRate = 0.10f;
+    private float staminaDrainTimer = 0f;
+    private float staminaAddTimer = 0f;
 
     Vector2 lastMoveDir = Vector2.up;
 
@@ -96,7 +105,8 @@ public class PlayerMovement : MonoBehaviour
                 flashlightLight.enabled = false;
                 Debug.Log("Flashlight died!");
             }
-        } else
+        }
+        else
         {
             addTimer += Time.deltaTime;
 
@@ -123,12 +133,52 @@ public class PlayerMovement : MonoBehaviour
             anim.SetFloat("moveX", movementX);
             anim.SetFloat("moveY", movementY);
         }
-
     }
 
     void FixedUpdate()
     {
-        Vector2 delta = new Vector2(movementX, movementY) * speed * Time.fixedDeltaTime;
+        // Sprint with Shift
+        bool wantsSprint = Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed;
+        bool isMoving = Mathf.Abs(movementX) + Mathf.Abs(movementY) > 0.01f;
+
+        float moveSpeed = speed;
+
+        if (wantsSprint && isMoving && PlayerHealth.Instance != null && PlayerHealth.Instance.HasStamina())
+        {
+            moveSpeed *= sprintMultiplier;
+
+            staminaDrainTimer += Time.fixedDeltaTime;
+
+            // Drain 1 stamina every staminaDrainRate seconds while sprinting
+            if (staminaDrainTimer >= staminaDrainRate)
+            {
+                PlayerHealth.Instance.LoseStamina();
+                staminaDrainTimer = 0f;
+            }
+
+            // Reset regen timer while sprinting
+            staminaAddTimer = 0f;
+        }
+        else
+        {
+            // Regen stamina while not sprinting
+            if (PlayerHealth.Instance != null)
+            {
+                staminaAddTimer += Time.fixedDeltaTime;
+
+                // Regen 1 stamina every staminaAddRate seconds
+                if (staminaAddTimer >= staminaAddRate)
+                {
+                    PlayerHealth.Instance.addStamina(1);
+                    staminaAddTimer = 0f;
+                }
+            }
+
+            // Reset drain timer while not sprinting
+            staminaDrainTimer = 0f;
+        }
+
+        Vector2 delta = new Vector2(movementX, movementY) * moveSpeed * Time.fixedDeltaTime;
         transform.position = (Vector2)transform.position + delta;
     }
 }
