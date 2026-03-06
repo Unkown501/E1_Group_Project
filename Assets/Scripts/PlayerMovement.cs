@@ -21,8 +21,14 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 lastMoveDir = Vector2.up;
 
+    public Animator anim;
+
     void Awake()
     {
+        // Animator
+        anim = GetComponent<Animator>();
+
+        // Flashlight
         if (flashlight == null)
             flashlight = transform.Find("Flashlight");
 
@@ -95,6 +101,16 @@ public class PlayerMovement : MonoBehaviour
             float angle = Mathf.Atan2(lastMoveDir.y, lastMoveDir.x) * Mathf.Rad2Deg;
             flashlight.localRotation = Quaternion.Euler(0f, 0f, angle + angleOffset);
         }
+
+        // Update player animation state
+        anim.SetFloat("speed", Mathf.Abs(movementX) + Mathf.Abs(movementY));
+
+        if (movementX != 0 || movementY != 0)
+        {
+            anim.SetFloat("moveX", movementX);
+            anim.SetFloat("moveY", movementY);
+        }
+
     }
 
     void FixedUpdate()
