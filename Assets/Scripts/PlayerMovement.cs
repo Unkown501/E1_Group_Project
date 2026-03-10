@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 lastMoveDir = Vector2.up;
 
+    Interactable currentInteractable;
+
     public Animator anim;
 
     void Awake()
@@ -63,6 +65,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Interact with interactable objects within range
+        if (currentInteractable != null && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            currentInteractable.Interact();
+        }
+
         // Toggle with F (New Input System friendly)
         if (flashlightLight != null && Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
         {
@@ -180,5 +188,25 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 delta = new Vector2(movementX, movementY) * moveSpeed * Time.fixedDeltaTime;
         transform.position = (Vector2)transform.position + delta;
+    }
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        // Set currentInteractable if contacted interactable range
+        Interactable interactable = other.GetComponent<Interactable>();
+        if (interactable != null)
+        {
+            currentInteractable = interactable;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        // Remove currentInteractable if left interactable range
+        Interactable interactable = other.GetComponent<Interactable>();
+        if (interactable != null && currentInteractable == interactable)
+        {
+            currentInteractable = null;
+        }
     }
 }
