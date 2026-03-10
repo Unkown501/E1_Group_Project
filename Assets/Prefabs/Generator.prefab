@@ -101,8 +101,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5271140934404032672}
   - component: {fileID: 8632151438213100872}
-  - component: {fileID: 6547463615674517059}
   - component: {fileID: 4734982676195448040}
+  - component: {fileID: 7846421795281495863}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -186,19 +186,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &6547463615674517059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4452030955666709309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5b2490d0fa994f7bb5e441314734f4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Interactable
-  prompt: {fileID: 5008991680564829763}
 --- !u!61 &4734982676195448040
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -245,6 +232,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &7846421795281495863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4452030955666709309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f796c70d2a72b4e14b9d762e4d4cda10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Generator
+  prompt: {fileID: 5008991680564829763}
+  flame: {fileID: 404919418848129355}
 --- !u!1 &5008991680564829763
 GameObject:
   m_ObjectHideFlags: 0
