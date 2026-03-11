@@ -3,21 +3,33 @@ using UnityEngine;
 public class DoorwayScript : MonoBehaviour
 {
     [SerializeField] NewSceneLoader sceneLoader;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip doorSound;
+
+    private bool hasTriggered = false;
+
     void Start()
-    { }
+    {
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player")
+        if (hasTriggered) return;
+
+        if (other.CompareTag("Player"))
         {
+            hasTriggered = true;
+
+            if (audioSource != null && doorSound != null)
+            {
+                audioSource.PlayOneShot(doorSound);
+            }
+
             sceneLoader.LoadScene();
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-
     }
 }
-
