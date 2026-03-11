@@ -45,13 +45,30 @@ public class LightsOut : MonoBehaviour
                 newLight.GetComponent<Button>().onClick.AddListener(() => OnButtonClicked(newRow, newCol));
             }
         }
+
+        LoadState();
     }
 
-    // Update is called once per frame
-    void Update()
+    void LoadState(string state)
     {
-        
+        string state = MinigameState.InitialState;
+
+        if (state && state.Length != nRows*nCols)
+        {
+            Debug.Log("INCORRECT STATE SIZE");
+            return;
+        }
+
+        int i = 0;
+        for (int row = 0; row < nRows; row++)
+        {
+            for (int col = 0; col < nCols; col++)
+            {
+                lights[row, col].GetComponent<LightButton>().lit = state[i] != '0';
+            }
+        }
     }
+
 
     void OnButtonClicked(int row, int col)
     {

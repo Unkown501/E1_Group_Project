@@ -66,17 +66,15 @@ public class Pipes : MonoBehaviour
             }
         }
         Debug.Log(seed);
+
+        LoadState();
     }
 
-    // Update is called once per frame
-    void Update()
+    void LoadState()
     {
-        
-    }
+        string state = MinigameState.InitialState;
 
-    void LoadState(string state)
-    {
-        if (state.Length != nRows*nCols*4)
+        if (state && state.Length != nRows*nCols*4)
         {
             Debug.Log("INCORRECT STATE SIZE");
             return;
