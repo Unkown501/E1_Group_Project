@@ -11,7 +11,8 @@ public static class MinigameState
     public static Dictionary<string, bool> CompletionStatus  = new Dictionary<string, bool>()
     {
         { "Terminal1", false },
-        { "Terminal2", false }
+        // { "Terminal2", false },
+        // { "Terminal3", false },
     };
 
 

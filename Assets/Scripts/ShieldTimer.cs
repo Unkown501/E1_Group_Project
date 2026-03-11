@@ -15,8 +15,7 @@ public class ShieldTimer : MonoBehaviour
     void Start()
     {
         currentTime = startTime;
-        UpdateTimerDisplay();
-        UpdateObjectiveDisplay();
+        ResetTimer();
     }
 
     void Update()
