@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Prevent this object from being deleted
+            // DontDestroyOnLoad(gameObject); // Prevent this object from being deleted
         }
         else
         {

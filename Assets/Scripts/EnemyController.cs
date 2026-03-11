@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] Transform goal;
+    private Transform goal;
     public enum MovementType
     {
         DirectChase,
@@ -16,13 +16,25 @@ public class EnemyController : MonoBehaviour
     public float viewDistance = 10f;
     public bool lightSensitive = false;
     public bool lightStunable = false;
-    public Light2D flashlight;
+    private Light2D flashlight;
     private bool inLight = false;
 
     AIPath ai;
     Rigidbody2D rb;
     float wanderTimer;
     Vector3 wanderTarget;
+
+    void Awake()
+    {
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null) {
+            goal = playerObj.transform;
+            Transform lightTransform = goal.Find("Flashlight"); 
+            if (lightTransform != null) {
+                flashlight = lightTransform.GetComponent<Light2D>();
+            }
+        }
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
