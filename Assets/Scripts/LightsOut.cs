@@ -49,13 +49,13 @@ public class LightsOut : MonoBehaviour
         LoadState();
     }
 
-    void LoadState(string state)
+    void LoadState()
     {
         string state = MinigameState.InitialState;
 
-        if (state && state.Length != nRows*nCols)
+        if (state != null && state.Length != nRows*nCols)
         {
-            Debug.Log("INCORRECT STATE SIZE");
+            Debug.Log("INCOMPATIBLE STATE");
             return;
         }
 

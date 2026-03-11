@@ -74,9 +74,9 @@ public class Pipes : MonoBehaviour
     {
         string state = MinigameState.InitialState;
 
-        if (state && state.Length != nRows*nCols*4)
+        if (state != null && state.Length != nRows*nCols*4)
         {
-            Debug.Log("INCORRECT STATE SIZE");
+            Debug.Log("INCOMPATIBLE STATE");
             return;
         }
 
