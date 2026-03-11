@@ -26,6 +26,7 @@ public class EnemyController : MonoBehaviour
     Rigidbody2D rb;
     float wanderTimer;
     Vector3 wanderTarget;
+    private SpriteRenderer sr;
 
     void Awake()
     {
@@ -57,6 +58,7 @@ public class EnemyController : MonoBehaviour
     {
         ai = GetComponent<AIPath>();
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -120,6 +122,7 @@ public class EnemyController : MonoBehaviour
         if (hit.collider == null && distance <= viewDistance && CheckLight() && !Stunned())
         {
             ai.destination = goal.position;
+            FlipSprite(direction);
         }
         if (Stunned())
         {
@@ -138,6 +141,7 @@ public class EnemyController : MonoBehaviour
         if (hit.collider == null && distance <= viewDistance && !CheckLight() && !Stunned())
         {
             ai.destination = goal.position;
+            FlipSprite(direction);
         }
         else
         {
@@ -188,6 +192,9 @@ public class EnemyController : MonoBehaviour
         {
             yield break;
         }
+
+        FlipSprite(direction);
+        
         yield return new WaitForSeconds(3f);
 
         ai.enabled = false;
@@ -222,5 +229,11 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(hitStunDuration);
 
         isStunned = false;
+    }
+
+    void FlipSprite(Vector2 direction)
+{
+    if (direction.x != 0)
+        sr.flipX = direction.x < 0;
     }
 }
