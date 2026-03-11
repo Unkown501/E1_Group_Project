@@ -1,48 +1,54 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ShieldTimer : MonoBehaviour
 {
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private TMP_Text objectiveText;
-
     [SerializeField] private float startTime = 180f;
 
     private float currentTime;
     private bool timerRunning = true;
-    private bool allTerminalsComplete = false;
+
+    private bool firstStageComplete = false;
+    private bool gameCompleted = false;
 
     void Start()
     {
         currentTime = startTime;
-        ResetTimer();
+        UpdateTimerDisplay();
+        UpdateObjectiveDisplay();
     }
 
     void Update()
     {
-        if (!timerRunning)
+        if (!gameCompleted && !firstStageComplete)
         {
-            return;
-        }
-
-        if (currentTime > 0)
-        {
-            currentTime -= Time.deltaTime;
-
-            if (currentTime < 0)
+            if (timerRunning)
             {
-                currentTime = 0;
-            }
+                if (currentTime > 0)
+                {
+                    currentTime -= Time.deltaTime;
 
-            UpdateTimerDisplay();
-            CheckAllObjectivesComplete();
-            UpdateObjectiveDisplay();
+                    if (currentTime < 0)
+                    {
+                        currentTime = 0;
+                    }
+
+                    UpdateTimerDisplay();
+                }
+                else
+                {
+                    timerRunning = false;
+                    TimerFinished();
+                }
+            }
         }
-        else
-        {
-            timerRunning = false;
-            TimerFinished();
-        }
+
+        CheckFirstStageComplete();
+        CheckSecondStageComplete();
+        UpdateObjectiveDisplay();
     }
 
     void UpdateTimerDisplay()
@@ -55,9 +61,23 @@ public class ShieldTimer : MonoBehaviour
 
     void UpdateObjectiveDisplay()
     {
-        if (allTerminalsComplete)
+        if (gameCompleted)
         {
-            objectiveText.text = "Restore power by searching the ship";
+            objectiveText.text = "Power restored.";
+            return;
+        }
+
+        if (firstStageComplete)
+        {
+            int power1 = MinigameState.CompletionStatus["PowerTerminal1"] ? 1 : 0;
+            int power2 = MinigameState.CompletionStatus["PowerTerminal2"] ? 1 : 0;
+            int power3 = MinigameState.CompletionStatus["PowerTerminal3"] ? 1 : 0;
+
+            objectiveText.text =
+                "Explore the ship\n" +
+                "Power Terminal 1: " + power1 + "/1\n" +
+                "Power Terminal 2: " + power2 + "/1\n" +
+                "Power Terminal 3: " + power3 + "/1";
             return;
         }
 
@@ -76,9 +96,9 @@ public class ShieldTimer : MonoBehaviour
         timerText.text = "Shield Fix In: 00:00";
         Debug.Log("Timer finished.");
 
-        if (!allTerminalsComplete)
+        if (!firstStageComplete)
         {
-            Debug.Log("Player failed to restore the shield in time.");
+            Debug.Log("Player failed to finish the shield tasks in time.");
 
             if (PlayerHealth.Instance != null)
             {
@@ -87,19 +107,30 @@ public class ShieldTimer : MonoBehaviour
         }
     }
 
-    void CheckAllObjectivesComplete()
+    void CheckFirstStageComplete()
     {
-        if (MinigameState.CompletionStatus["Terminal1"] == true &&
+        if (!firstStageComplete &&
+            MinigameState.CompletionStatus["Terminal1"] == true &&
             MinigameState.CompletionStatus["Terminal2"] == true &&
             MinigameState.CompletionStatus["Terminal3"] == true)
         {
-            if (!allTerminalsComplete)
-            {
-                allTerminalsComplete = true;
-                timerRunning = false;
-                Debug.Log("All shield objectives completed!");
-                UpdateObjectiveDisplay();
-            }
+            firstStageComplete = true;
+            timerRunning = false;
+            Debug.Log("First stage complete. Explore the ship.");
+            UpdateObjectiveDisplay();
+        }
+    }
+
+    void CheckSecondStageComplete()
+    {
+        if (firstStageComplete && !gameCompleted &&
+            MinigameState.CompletionStatus["PowerTerminal1"] == true &&
+            MinigameState.CompletionStatus["PowerTerminal2"] == true &&
+            MinigameState.CompletionStatus["PowerTerminal3"] == true)
+        {
+            gameCompleted = true;
+            Debug.Log("All power terminals completed. Loading Survive scene.");
+            SceneManager.LoadScene("Survived");
         }
     }
 
@@ -107,11 +138,16 @@ public class ShieldTimer : MonoBehaviour
     {
         currentTime = startTime;
         timerRunning = true;
-        allTerminalsComplete = false;
+        firstStageComplete = false;
+        gameCompleted = false;
 
         MinigameState.CompletionStatus["Terminal1"] = false;
         MinigameState.CompletionStatus["Terminal2"] = false;
         MinigameState.CompletionStatus["Terminal3"] = false;
+
+        MinigameState.CompletionStatus["PowerTerminal1"] = false;
+        MinigameState.CompletionStatus["PowerTerminal2"] = false;
+        MinigameState.CompletionStatus["PowerTerminal3"] = false;
 
         UpdateTimerDisplay();
         UpdateObjectiveDisplay();
@@ -124,7 +160,7 @@ public class ShieldTimer : MonoBehaviour
 
     public void StartTimer()
     {
-        if (!allTerminalsComplete)
+        if (!firstStageComplete && !gameCompleted)
         {
             timerRunning = true;
         }
