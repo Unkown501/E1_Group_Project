@@ -11,9 +11,9 @@ public class Pipes : MonoBehaviour
     [SerializeField] int nCols = 6;
     [SerializeField] int startRow = 3;
     [SerializeField] int targetRow = 2;
-    // [SerializeField] int[,] initialState;
 
     private RectTransform containerRect;
+    private NewSceneLoader sceneLoader;
 
     private GameObject[,] pipes;
 
@@ -22,7 +22,9 @@ public class Pipes : MonoBehaviour
     {
         pipes = new GameObject[nRows, nCols];
         
+        sceneLoader = GetComponent<NewSceneLoader>();
         containerRect = GetComponent<RectTransform>();
+
         float height = containerRect.rect.height;
         float width = containerRect.rect.width;
 
@@ -73,6 +75,11 @@ public class Pipes : MonoBehaviour
     void LoadState()
     {
         string state = MinigameState.InitialState;
+        string returnScene = MinigameState.ReturnScene;
+        Vector2 returnPosition = MinigameState.ReturnPosition;
+
+        sceneLoader.sceneToLoad = returnScene;
+        sceneLoader.targetSpawnPosition = returnPosition;
 
         if (state != null && state.Length != nRows*nCols*4)
         {
@@ -101,6 +108,7 @@ public class Pipes : MonoBehaviour
         if (IsConnected(startRow, targetRow))
         {
             Debug.Log("COMPLETED!");
+            sceneLoader.LoadScene();
         }
     }
 

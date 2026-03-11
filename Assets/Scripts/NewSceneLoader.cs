@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class NewSceneLoader : MonoBehaviour
 {
     [Header("Scene Loading Settings")]
-    [SerializeField] string sceneToLoad;
-    [SerializeField] Vector2 targetSpawnPosition;
+    [SerializeField] public string sceneToLoad;
+    [SerializeField] public Vector2 targetSpawnPosition;
 
     // Static variables survive even if this specific loader object is destroyed during the scene change
     private static Vector2 nextSpawnPosition;

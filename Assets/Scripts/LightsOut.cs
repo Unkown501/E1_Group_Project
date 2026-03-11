@@ -11,6 +11,7 @@ public class LightsOut : MonoBehaviour
     [SerializeField] int nCols = 4;
 
     private RectTransform containerRect;
+    private NewSceneLoader sceneLoader;
 
     private GameObject[,] lights;
 
@@ -19,7 +20,9 @@ public class LightsOut : MonoBehaviour
     {
         lights = new GameObject[nRows, nCols];
 
+        sceneLoader = GetComponent<NewSceneLoader>();
         containerRect = GetComponent<RectTransform>();
+
         float height = containerRect.rect.height;
         float width = containerRect.rect.width;
 
@@ -52,6 +55,11 @@ public class LightsOut : MonoBehaviour
     void LoadState()
     {
         string state = MinigameState.InitialState;
+        string returnScene = MinigameState.ReturnScene;
+        Vector2 returnPosition = MinigameState.ReturnPosition;
+
+        sceneLoader.sceneToLoad = returnScene;
+        sceneLoader.targetSpawnPosition = returnPosition;
 
         if (state != null && state.Length != nRows*nCols)
         {
@@ -96,6 +104,7 @@ public class LightsOut : MonoBehaviour
         if (isAllOn())
         {
             Debug.Log("COMPLETED!");
+            sceneLoader.LoadScene();
         }
     }
 
