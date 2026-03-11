@@ -9,7 +9,6 @@ public class LightsOut : MonoBehaviour
 
     [SerializeField] int nRows = 4;
     [SerializeField] int nCols = 4;
-    [SerializeField] int[,] initialState;
 
     private RectTransform containerRect;
 
@@ -52,6 +51,24 @@ public class LightsOut : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void LoadState(string state)
+    {
+        if (state.Length != nRows*nCols)
+        {
+            Debug.Log("INCORRECT STATE SIZE");
+            return;
+        }
+
+        int i = 0;
+        for (int row = 0; row < nRows; row++)
+        {
+            for (int col = 0; col < nCols; col++)
+            {
+                lights[row, col].GetComponent<LightButton>().lit = state[i] != '0';
+            }
+        }
     }
 
     void OnButtonClicked(int row, int col)
