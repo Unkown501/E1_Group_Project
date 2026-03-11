@@ -3,11 +3,8 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
     public static bool IsPaused = false;
-    private Canvas canvasObject;
-
     void Awake()
     {
-        canvasObject = GetComponent<Canvas>();
         if (IsPaused)
             Pause();
         else
@@ -25,14 +22,14 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0f;
-        canvasObject.enabled = true;
+        gameObject.SetActive(true);
         IsPaused = true;
     }
 
     public void Resume()
     {
         Time.timeScale = 1f;
-        canvasObject.enabled = false;
+        gameObject.SetActive(false);
         IsPaused = false;
     }
 }
