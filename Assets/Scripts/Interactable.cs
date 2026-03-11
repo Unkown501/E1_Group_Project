@@ -1,15 +1,19 @@
 using UnityEngine;
+using TMPro;
 
 public class Interactable : MonoBehaviour
 {
-    public GameObject prompt;
-
+    [SerializeField] private TMP_Text prompt;
     protected bool playerInRange = false;
+    protected float OriginalFontSize;
 
     protected virtual void Start()
     {
         if (prompt != null)
-            prompt.SetActive(false);
+            OriginalFontSize = prompt.fontSize;
+
+            prompt.text = "!!!";
+            prompt.fontSize = 96;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -18,7 +22,8 @@ public class Interactable : MonoBehaviour
         {
             playerInRange = true;
             if (prompt != null)
-                prompt.SetActive(true);
+                prompt.text = "INTERACT (E)";
+                prompt.fontSize = OriginalFontSize;
         }
     }
 
@@ -28,7 +33,8 @@ public class Interactable : MonoBehaviour
         {
             playerInRange = false;
             if (prompt != null)
-                prompt.SetActive(false);
+                prompt.text = "!!!";
+                prompt.fontSize = 128;
         }
     }
 

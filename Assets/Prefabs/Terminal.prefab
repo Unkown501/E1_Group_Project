@@ -289,7 +289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7316d8bde3a64cfda3e2cd385320e4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  prompt: {fileID: 5981365103472553158}
+  prompt: {fileID: 2803984222254793106}
+  TerminalID: 
   InitialState: 
   GameName: 
 --- !u!1 &5981365103472553158
