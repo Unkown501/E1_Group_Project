@@ -12,6 +12,7 @@ public class ShieldTimer : MonoBehaviour
     private bool timerRunning = true;
 
     private bool firstStageComplete = false;
+    private bool powerPillarsComplete = false;
     private bool gameCompleted = false;
 
     void Start()
@@ -47,6 +48,7 @@ public class ShieldTimer : MonoBehaviour
         }
 
         CheckFirstStageComplete();
+        CheckPowerPillarsComplete();
         CheckSecondStageComplete();
         UpdateObjectiveDisplay();
     }
@@ -67,17 +69,30 @@ public class ShieldTimer : MonoBehaviour
             return;
         }
 
-        if (firstStageComplete)
+        if (firstStageComplete && !powerPillarsComplete)
         {
-            int power1 = MinigameState.CompletionStatus["PowerTerminal1"] ? 1 : 0;
-            int power2 = MinigameState.CompletionStatus["PowerTerminal2"] ? 1 : 0;
-            int power3 = MinigameState.CompletionStatus["PowerTerminal3"] ? 1 : 0;
+            int power1 = MinigameState.CompletionStatus["Power1"] ? 1 : 0;
+            int power2 = MinigameState.CompletionStatus["Power2"] ? 1 : 0;
 
             objectiveText.text =
                 "Explore the ship\n" +
-                "Power Terminal 1: " + power1 + "/1\n" +
-                "Power Terminal 2: " + power2 + "/1\n" +
-                "Power Terminal 3: " + power3 + "/1";
+                "Turn on the power pillars without the fire\n" +
+                "Power Pillar 1: " + power1 + "/1\n" +
+                "Power Pillar 2: " + power2 + "/1";
+            return;
+        }
+
+        if (powerPillarsComplete)
+        {
+            int powerTerminal1 = MinigameState.CompletionStatus["PowerTerminal1"] ? 1 : 0;
+            int powerTerminal2 = MinigameState.CompletionStatus["PowerTerminal2"] ? 1 : 0;
+            int powerTerminal3 = MinigameState.CompletionStatus["PowerTerminal3"] ? 1 : 0;
+
+            objectiveText.text =
+                "Power restored. Activate terminals\n" +
+                "Power Terminal 1: " + powerTerminal1 + "/1\n" +
+                "Power Terminal 2: " + powerTerminal2 + "/1\n" +
+                "Power Terminal 3: " + powerTerminal3 + "/1";
             return;
         }
 
@@ -121,15 +136,27 @@ public class ShieldTimer : MonoBehaviour
         }
     }
 
+    void CheckPowerPillarsComplete()
+    {
+        if (firstStageComplete && !powerPillarsComplete &&
+            MinigameState.CompletionStatus["Power1"] == true &&
+            MinigameState.CompletionStatus["Power2"] == true)
+        {
+            powerPillarsComplete = true;
+            Debug.Log("Power pillars complete. Now activate power terminals.");
+            UpdateObjectiveDisplay();
+        }
+    }
+
     void CheckSecondStageComplete()
     {
-        if (firstStageComplete && !gameCompleted &&
+        if (powerPillarsComplete && !gameCompleted &&
             MinigameState.CompletionStatus["PowerTerminal1"] == true &&
             MinigameState.CompletionStatus["PowerTerminal2"] == true &&
             MinigameState.CompletionStatus["PowerTerminal3"] == true)
         {
             gameCompleted = true;
-            Debug.Log("All power terminals completed. Loading Survive scene.");
+            Debug.Log("All power terminals completed. Loading Survived scene.");
             SceneManager.LoadScene("Survived");
         }
     }
@@ -139,11 +166,15 @@ public class ShieldTimer : MonoBehaviour
         currentTime = startTime;
         timerRunning = true;
         firstStageComplete = false;
+        powerPillarsComplete = false;
         gameCompleted = false;
 
         MinigameState.CompletionStatus["Terminal1"] = false;
         MinigameState.CompletionStatus["Terminal2"] = false;
         MinigameState.CompletionStatus["Terminal3"] = false;
+
+        MinigameState.CompletionStatus["Power1"] = false;
+        MinigameState.CompletionStatus["Power2"] = false;
 
         MinigameState.CompletionStatus["PowerTerminal1"] = false;
         MinigameState.CompletionStatus["PowerTerminal2"] = false;
