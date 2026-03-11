@@ -108,6 +108,7 @@ public class Pipes : MonoBehaviour
         if (IsConnected(startRow, targetRow))
         {
             Debug.Log("COMPLETED!");
+            MinigameState.CompletionStatus[MinigameState.TerminalID] = true;
             sceneLoader.LoadScene();
         }
     }

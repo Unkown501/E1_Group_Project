@@ -3,11 +3,18 @@ using UnityEngine.SceneManagement;
 
 public class Terminal : Interactable
 {
+    [SerializeField] string TerminalID;
     [SerializeField] string InitialState;
     [SerializeField] string GameName;
 
     public override void Interact()
     {
+        // Ignore if already complete
+        if (MinigameState.CompletionStatus[TerminalID])
+        {
+            return;
+        }
+        MinigameState.TerminalID = TerminalID;
         MinigameState.InitialState = InitialState;
         MinigameState.ReturnScene = SceneManager.GetActiveScene().name;
         MinigameState.ReturnPosition = (Vector2)transform.position;
