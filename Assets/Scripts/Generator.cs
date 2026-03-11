@@ -4,10 +4,13 @@ public class Generator : Interactable
 {
     bool isActivated = false;
     [SerializeField] GameObject flame;
+    [SerializeField] string ID;
+
 
     void Update()
     {
         flame.SetActive(isActivated);
+        MinigameState.CompletionStatus[ID] = isActivated;
     }
 
 
@@ -15,6 +18,7 @@ public class Generator : Interactable
     {
         Debug.Log("Toggled Generator");
         isActivated = !isActivated;
+        MinigameState.CompletionStatus[ID] = isActivated;
     }
 
 }
