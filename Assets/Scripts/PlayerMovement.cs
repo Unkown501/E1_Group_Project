@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     float movementX;
     float movementY;
 
+    private Rigidbody2D rb;
+
     [SerializeField] float speed = 2.0f;
 
     [Header("Flashlight Settings")]
@@ -39,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         // Animator
         anim = GetComponent<Animator>();
 
@@ -186,8 +189,9 @@ public class PlayerMovement : MonoBehaviour
             staminaDrainTimer = 0f;
         }
 
-        Vector2 delta = new Vector2(movementX, movementY) * moveSpeed * Time.fixedDeltaTime;
-        transform.position = (Vector2)transform.position + delta;
+        // Vector2 delta = new Vector2(movementX, movementY) * moveSpeed * Time.fixedDeltaTime;
+        Vector2 newPos = rb.position + new Vector2(movementX, movementY) * (moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(newPos);
     }
     void OnTriggerEnter2D(Collider2D other)
     {

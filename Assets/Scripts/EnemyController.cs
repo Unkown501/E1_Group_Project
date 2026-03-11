@@ -110,7 +110,7 @@ public class EnemyController : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rb.position, direction, distance, layerMask);
 
-        if (hit.collider == null && distance <= viewDistance && !Stunned())
+        if (hit.collider == null && distance <= viewDistance && !CheckLight() && !Stunned())
         {
             ai.destination = goal.position;
         }
