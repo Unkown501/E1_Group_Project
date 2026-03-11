@@ -159,4 +159,9 @@ public class PlayerHealth : MonoBehaviour
         spriteRenderer.enabled = true; // Ensure sprite is visible at the end
         isInvincible = false;
     }
+    public void KillPlayer()
+    {
+        OnPlayerDeath?.Invoke();
+        Die();
+    }
 }

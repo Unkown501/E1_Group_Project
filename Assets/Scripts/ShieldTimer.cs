@@ -10,10 +10,7 @@ public class ShieldTimer : MonoBehaviour
 
     private float currentTime;
     private bool timerRunning = true;
-
-    private int mainConsoleActive = 0;
-    private int shieldConsoleActive = 0;
-    private int powerFlowRestored = 0;
+    private bool allTerminalsComplete = false;
 
     void Start()
     {
@@ -39,6 +36,8 @@ public class ShieldTimer : MonoBehaviour
             }
 
             UpdateTimerDisplay();
+            CheckAllObjectivesComplete();
+            UpdateObjectiveDisplay();
         }
         else
         {
@@ -57,10 +56,20 @@ public class ShieldTimer : MonoBehaviour
 
     void UpdateObjectiveDisplay()
     {
+        if (allTerminalsComplete)
+        {
+            objectiveText.text = "Restore power by searching the ship";
+            return;
+        }
+
+        int terminal1 = MinigameState.CompletionStatus["Terminal1"] ? 1 : 0;
+        int terminal2 = MinigameState.CompletionStatus["Terminal2"] ? 1 : 0;
+        int terminal3 = MinigameState.CompletionStatus["Terminal3"] ? 1 : 0;
+
         objectiveText.text =
-            "Main Console Active: " + mainConsoleActive + "/1\n" +
-            "Shield Console Active: " + shieldConsoleActive + "/1\n" +
-            "Restore Power Flow: " + powerFlowRestored + "/1";
+            "Main Console Active: " + terminal1 + "/1\n" +
+            "Shield Console Active: " + terminal2 + "/1\n" +
+            "Restore Power Flow: " + terminal3 + "/1";
     }
 
     void TimerFinished()
@@ -68,37 +77,30 @@ public class ShieldTimer : MonoBehaviour
         timerText.text = "Shield Fix In: 00:00";
         Debug.Log("Timer finished.");
 
-        // Put game result logic here
-    }
+        if (!allTerminalsComplete)
+        {
+            Debug.Log("Player failed to restore the shield in time.");
 
-    public void ActivateMainConsole()
-    {
-        mainConsoleActive = 1;
-        UpdateObjectiveDisplay();
-        CheckAllObjectivesComplete();
-    }
-
-    public void ActivateShieldConsole()
-    {
-        shieldConsoleActive = 1;
-        UpdateObjectiveDisplay();
-        CheckAllObjectivesComplete();
-    }
-
-    public void RestorePowerFlow()
-    {
-        powerFlowRestored = 1;
-        UpdateObjectiveDisplay();
-        CheckAllObjectivesComplete();
+            if (PlayerHealth.Instance != null)
+            {
+                PlayerHealth.Instance.KillPlayer();
+            }
+        }
     }
 
     void CheckAllObjectivesComplete()
     {
-        if (mainConsoleActive == 1 &&
-            shieldConsoleActive == 1 &&
-            powerFlowRestored == 1)
+        if (MinigameState.CompletionStatus["Terminal1"] == true &&
+            MinigameState.CompletionStatus["Terminal2"] == true &&
+            MinigameState.CompletionStatus["Terminal3"] == true)
         {
-            Debug.Log("All shield objectives completed!");
+            if (!allTerminalsComplete)
+            {
+                allTerminalsComplete = true;
+                timerRunning = false;
+                Debug.Log("All shield objectives completed!");
+                UpdateObjectiveDisplay();
+            }
         }
     }
 
@@ -106,10 +108,11 @@ public class ShieldTimer : MonoBehaviour
     {
         currentTime = startTime;
         timerRunning = true;
+        allTerminalsComplete = false;
 
-        mainConsoleActive = 0;
-        shieldConsoleActive = 0;
-        powerFlowRestored = 0;
+        MinigameState.CompletionStatus["Terminal1"] = false;
+        MinigameState.CompletionStatus["Terminal2"] = false;
+        MinigameState.CompletionStatus["Terminal3"] = false;
 
         UpdateTimerDisplay();
         UpdateObjectiveDisplay();
@@ -122,6 +125,9 @@ public class ShieldTimer : MonoBehaviour
 
     public void StartTimer()
     {
-        timerRunning = true;
+        if (!allTerminalsComplete)
+        {
+            timerRunning = true;
+        }
     }
 }
