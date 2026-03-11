@@ -12,12 +12,15 @@ public class EnemyController : MonoBehaviour
         LineOfSight,
         RushDown
     }
+    [SerializeField] private int damageAmount = 10;
     [SerializeField] private MovementType _MovementType;
+    [SerializeField] private float hitStunDuration = 1.0f; // How long the enemy stops for
     public float viewDistance = 10f;
     public bool lightSensitive = false;
     public bool lightStunable = false;
     private Light2D flashlight;
     private bool inLight = false;
+    private bool isStunned = false;
 
     AIPath ai;
     Rigidbody2D rb;
@@ -35,7 +38,20 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-
+    // Triggered when the enemy touches the player's collider
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Use the Singleton instance to apply damage
+            if (PlayerHealth.Instance != null)
+            {
+                PlayerHealth.Instance.TakeDamage(damageAmount);
+                StartCoroutine(StopMovement());
+            }
+        }
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -46,6 +62,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isStunned) return;
         switch (_MovementType)
         {
             case MovementType.DirectChase:
@@ -79,6 +96,14 @@ public class EnemyController : MonoBehaviour
     {
         Debug.Log("Entered Flashlight Trigger");
             inLight = true;
+        if (other.CompareTag("Player"))
+        {
+            if (PlayerHealth.Instance != null)
+            {
+                PlayerHealth.Instance.TakeDamage(damageAmount);
+                StartCoroutine(StopMovement());
+            }
+        }
     }
     void OnTriggerExit2D(Collider2D other)
     {
@@ -184,5 +209,18 @@ public class EnemyController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         ai.enabled = true;
     }
+    private IEnumerator StopMovement()
+    {
+        isStunned = true;
 
+        // Kill the enemy's current velocity so they don't slide into the player
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        yield return new WaitForSeconds(hitStunDuration);
+
+        isStunned = false;
+    }
 }

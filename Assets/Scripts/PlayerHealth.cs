@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections; // Required for Coroutines
 public class PlayerHealth : MonoBehaviour
 {
     public static PlayerHealth Instance; // Static reference to the singleton
@@ -16,6 +16,12 @@ public class PlayerHealth : MonoBehaviour
     public int maxStamina = 100;
     public int currentStamina;
 
+    [Header("I-Frame Settings")]
+    [SerializeField] private float iFrameDuration = 1.5f;
+    [SerializeField] private float flashInterval = 0.1f;
+    private bool isInvincible = false;
+    private SpriteRenderer spriteRenderer;
+
     void Awake()
     {
         // Singleton Logic: Ensure only one PlayerHealth exists
@@ -30,6 +36,9 @@ public class PlayerHealth : MonoBehaviour
             return;
         }
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        currentHealth = maxHealth;
+
         // Initialize health only once
         currentHealth = maxHealth;
         currentBattery = maxBattery;
@@ -41,6 +50,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+
+        if (isInvincible) return;
         currentHealth -= damage;
         Debug.Log("Player took " + damage + " damage. Current health: " + currentHealth);
 
@@ -48,6 +59,11 @@ public class PlayerHealth : MonoBehaviour
         {
             OnPlayerDeath?.Invoke();
             Die();
+        }
+        else
+        {
+            // Start invincibility period
+            StartCoroutine(BecomeInvincible());
         }
     }
 
@@ -126,5 +142,21 @@ public class PlayerHealth : MonoBehaviour
         // If the object is destroyed, the Singleton Instance becomes null.
         // You might want to just disable the player or trigger a reload instead.
         Destroy(gameObject);
+    }
+    private IEnumerator BecomeInvincible()
+    {
+        isInvincible = true;
+
+        // Visual feedback: Flash the player sprite
+        float elapsed = 0f;
+        while (elapsed < iFrameDuration)
+        {
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+            yield return new WaitForSeconds(flashInterval);
+            elapsed += flashInterval;
+        }
+
+        spriteRenderer.enabled = true; // Ensure sprite is visible at the end
+        isInvincible = false;
     }
 }
