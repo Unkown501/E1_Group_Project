@@ -446,7 +446,6 @@ GameObject:
   - component: {fileID: 1865164833071218105}
   - component: {fileID: 6818302137272388014}
   - component: {fileID: 2177352753555682580}
-  - component: {fileID: 1044228685274892900}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -699,18 +698,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1044228685274892900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8187439684346143865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a780896715735c468afa04f81340bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBarsUI
-  healthFill: {fileID: 0}
-  batteryFill: {fileID: 0}
-  staminaFill: {fileID: 0}
