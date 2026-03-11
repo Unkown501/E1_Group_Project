@@ -74,6 +74,28 @@ public class Pipes : MonoBehaviour
         
     }
 
+    void LoadState(string state)
+    {
+        if (state.Length != nRows*nCols*4)
+        {
+            Debug.Log("INCORRECT STATE SIZE");
+            return;
+        }
+
+        int i = 0;
+        for (int row = 0; row < nRows; row++)
+        {
+            for (int col = 0; col < nCols; col++)
+            {
+                pipes[row, col].GetComponent<PipeButton>().up = state[i] != '0';
+                pipes[row, col].GetComponent<PipeButton>().right = state[i+1] != '0';
+                pipes[row, col].GetComponent<PipeButton>().down = state[i+2] != '0';
+                pipes[row, col].GetComponent<PipeButton>().left = state[i+3] != '0';
+                i += 4;
+            }
+        }
+    }
+
     void OnButtonClicked(int row, int col)
     {
         pipes[row, col].GetComponent<PipeButton>().Rotate();

@@ -53,24 +53,6 @@ public class LightsOut : MonoBehaviour
         
     }
 
-    void LoadState(string state)
-    {
-        if (state.Length != nRows*nCols)
-        {
-            Debug.Log("INCORRECT STATE SIZE");
-            return;
-        }
-
-        int i = 0;
-        for (int row = 0; row < nRows; row++)
-        {
-            for (int col = 0; col < nCols; col++)
-            {
-                lights[row, col].GetComponent<LightButton>().lit = state[i] != '0';
-            }
-        }
-    }
-
     void OnButtonClicked(int row, int col)
     {
         Debug.Log($"Clicked button at [{row}, {col}]");
