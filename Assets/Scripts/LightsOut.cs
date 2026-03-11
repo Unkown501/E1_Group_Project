@@ -104,6 +104,7 @@ public class LightsOut : MonoBehaviour
         if (isAllOn())
         {
             Debug.Log("COMPLETED!");
+            MinigameState.CompletionStatus[MinigameState.TerminalID] = true;
             sceneLoader.LoadScene();
         }
     }
