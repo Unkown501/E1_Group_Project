@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f796c70d2a72b4e14b9d762e4d4cda10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Generator
-  prompt: {fileID: 5008991680564829763}
+  prompt: {fileID: 8431774569037474816}
   flame: {fileID: 404919418848129355}
 --- !u!1 &5008991680564829763
 GameObject:
