@@ -73,6 +73,7 @@ public class LightsOut : MonoBehaviour
             for (int col = 0; col < nCols; col++)
             {
                 lights[row, col].GetComponent<LightButton>().lit = state[i] != '0';
+                i++;
             }
         }
     }

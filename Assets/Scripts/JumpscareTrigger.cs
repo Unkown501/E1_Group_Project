@@ -15,6 +15,10 @@ public class JumpscareTrigger : MonoBehaviour
         {
             hasTriggered = true;
             jumpscarePlayer.PlayJumpscare();
+            if (triggerOnce)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

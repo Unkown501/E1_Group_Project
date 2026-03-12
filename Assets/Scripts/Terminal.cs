@@ -7,6 +7,15 @@ public class Terminal : Interactable
     [SerializeField] string InitialState;
     [SerializeField] string GameName;
 
+    void Update()
+    {
+        // Turn off if already complete
+        if (MinigameState.CompletionStatus[TerminalID])
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
     public override void Interact()
     {
         // Ignore if already complete
